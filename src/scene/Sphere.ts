@@ -18,7 +18,8 @@ export class Sphere {
 
         if (discriminant < 0) return null;
 
-        return (-b - Math.sqrt(discriminant)) / (2.0 * a);
+        const t = (-b - Math.sqrt(discriminant)) / (2.0 * a);
+        return t > 0.001 ? t : null; // avoid self-intersection
     }
 
     getNormal(point: Vector3): Vector3 {
