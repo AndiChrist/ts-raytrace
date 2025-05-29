@@ -1,6 +1,7 @@
 import { Vector3 } from "../math/Vector3";
 import { Ray } from "../core/Ray";
 import { Color } from "../utils/Color";
+import { AABB } from "../acceleration/AABB";
 
 export class Sphere {
     constructor(
@@ -25,5 +26,13 @@ export class Sphere {
 
     getNormal(point: Vector3): Vector3 {
         return point.subtract(this.center).normalize();
+    }
+
+    getBoundingBox(): AABB {
+        const r = this.radius;
+        return new AABB(
+            new Vector3(this.center.x - r, this.center.y - r, this.center.z - r),
+            new Vector3(this.center.x + r, this.center.y + r, this.center.z + r)
+        );
     }
 }

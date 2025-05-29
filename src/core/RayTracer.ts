@@ -17,6 +17,9 @@ export class RayTracer {
         let hitObject: Sphere | null = null;
 
         for (const obj of this.scene.objects) {
+            const bbox = obj.getBoundingBox();
+            if (!bbox.intersects(ray)) continue;
+
             const t = obj.intersect(ray);
             if (t !== null && t < closest) {
                 closest = t;
