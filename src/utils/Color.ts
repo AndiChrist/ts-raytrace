@@ -9,6 +9,10 @@ export class Color {
         return new Color(this.r + c.r, this.g + c.g, this.b + c.b);
     }
 
+    blend(c: Color, factor: number): Color {
+        return this.multiply(1 - factor).add(c.multiply(factor));
+    }
+
     toRGB(): [number, number, number] {
         return [
             Math.min(255, Math.max(0, Math.floor(this.r * 255))),

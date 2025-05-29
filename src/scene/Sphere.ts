@@ -6,7 +6,8 @@ export class Sphere {
     constructor(
         public center: Vector3,
         public radius: number,
-        public color: Color
+        public color: Color,
+        public reflectivity: number = 0 // 0 = matte, 1 = perfect mirror
     ) {}
 
     intersect(ray: Ray): number | null {

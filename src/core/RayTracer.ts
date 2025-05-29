@@ -7,7 +7,9 @@ import { Sphere } from "../scene/Sphere";
 export class RayTracer {
     constructor(private scene: Scene) {}
 
-    trace(ray: Ray): Color {
+    trace(ray: Ray, depth: number = 0): Color {
+        if (depth > 3) return new Color(0, 0, 0);
+
         let closest = Infinity;
         let hitColor = new Color(0, 0, 0);
         let hitPoint: Vector3 | null = null;
@@ -30,9 +32,8 @@ export class RayTracer {
             for (const light of this.scene.lights) {
                 const toLight = light.position.subtract(hitPoint).normalize();
 
-                // Shadow check
                 const shadowRay = new Ray(
-                    hitPoint.add(hitNormal.scale(0.001)), // offset to avoid self-intersection
+                    hitPoint.add(hitNormal.scale(0.001)),
                     toLight
                 );
 
@@ -51,6 +52,17 @@ export class RayTracer {
                     color = color.add(hitObject.color.multiply(lightPower));
                 }
             }
+
+            if (hitObject.reflectivity > 0) {
+                const reflectedDir = ray.direction.reflect(hitNormal).normalize();
+                const reflectedRay = new Ray(
+                    hitPoint.add(hitNormal.scale(0.001)),
+                    reflectedDir
+                );
+                const reflectedColor = this.trace(reflectedRay, depth + 1);
+                color = color.blend(reflectedColor, hitObject.reflectivity);
+            }
+
             return color;
         }
 
