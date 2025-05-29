@@ -13,13 +13,13 @@ const height = 1000;
 const aspectRatio = width / height;
 const camera = new Camera(new Vector3(0, 0, 0), 2.0, 2.0 / aspectRatio, 1.0);
 
-const glass = new Material(new Color(0.6, 0.8, 1.0), 0.1, 0.9, 1.5);
-const metal = new Material(new Color(0.8, 0.8, 0.8), 0.9, 0.0);
-const wood = new Material(new Color(0.5, 0.3, 0.1), 0.0, 0.0);
+const shinyRed = new Material(new Color(1, 0, 0), 0.3, 0, 1, 16, 0.7);
+const matteGreen = new Material(new Color(0, 1, 0), 0, 0, 1, 8, 0.1);
+const mirrorBlue = new Material(new Color(0, 0, 1), 0.9, 0, 1, 128, 1);
 
-const redSphere = new Sphere(new Vector3(0, 0, -5), 1, glass);
-const greenSphere = new Sphere(new Vector3(-1.5, 0, -4), 0.5, wood);
-const blueSphere = new Sphere(new Vector3(1.5, 0, -6), 0.75, metal);
+const redSphere = new Sphere(new Vector3(0, 0, -5), 1, shinyRed);
+const greenSphere = new Sphere(new Vector3(-1.5, 0, -4), 0.5, matteGreen);
+const blueSphere = new Sphere(new Vector3(1.5, 0, -6), 0.75, mirrorBlue);
 
 const light1 = new Light(new Vector3(5, 5, 0), 1.0);
 const light2 = new Light(new Vector3(-5, 5, 0), 0.5);

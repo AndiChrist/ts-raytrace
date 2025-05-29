@@ -11,7 +11,6 @@ export class RayTracer {
         if (depth > 3) return new Color(0, 0, 0);
 
         let closest = Infinity;
-        let hitColor = new Color(0, 0, 0);
         let hitPoint: Vector3 | null = null;
         let hitNormal: Vector3 | null = null;
         let hitObject: Sphere | null = null;
@@ -25,7 +24,6 @@ export class RayTracer {
                 closest = t;
                 hitPoint = ray.origin.add(ray.direction.scale(t));
                 hitNormal = obj.getNormal(hitPoint);
-                hitColor = obj.material.color;
                 hitObject = obj;
             }
         }
@@ -52,7 +50,20 @@ export class RayTracer {
 
                 if (!inShadow) {
                     const lightPower = Math.max(0, hitNormal.dot(toLight)) * light.intensity;
-                    color = color.add(hitObject.material.color.multiply(lightPower));
+                    const diffuse = hitObject.material.color.multiply(lightPower);
+
+                    // ⭐️ Neu: Specular highlight
+                    const shininess = hitObject.material.shininess;
+                    const specularStrength = hitObject.material.specularStrength;
+
+                    const viewDir = ray.direction.scale(-1).normalize();
+                    const reflectDir = toLight.reflect(hitNormal).normalize();
+                    const specAngle = Math.max(0, viewDir.dot(reflectDir));
+                    const specular = new Color(1, 1, 1).multiply(
+                        specularStrength * Math.pow(specAngle, shininess)
+                    );
+
+                    color = color.add(diffuse).add(specular);
                 }
             }
 
@@ -91,6 +102,6 @@ export class RayTracer {
             return color;
         }
 
-        return hitColor;
+        return new Color(0, 0, 0);
     }
 }
