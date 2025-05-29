@@ -20,4 +20,8 @@ export class Sphere {
 
         return (-b - Math.sqrt(discriminant)) / (2.0 * a);
     }
+
+    getNormal(point: Vector3): Vector3 {
+        return point.subtract(this.center).normalize();
+    }
 }

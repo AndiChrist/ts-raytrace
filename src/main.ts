@@ -1,6 +1,6 @@
 import { Vector3 } from "./math/Vector3";
 import { Camera } from "./core/Camera";
-import { Scene } from "./scene/Scene";
+import { Scene, Light } from "./scene/Scene";
 import { Sphere } from "./scene/Sphere";
 import { RayTracer } from "./core/RayTracer";
 import { Color } from "./utils/Color";
@@ -13,7 +13,13 @@ const aspectRatio = width / height;
 const camera = new Camera(new Vector3(0, 0, 0), 2.0, 2.0 / aspectRatio, 1.0);
 
 const redSphere = new Sphere(new Vector3(0, 0, -5), 1, new Color(1, 0, 0));
-const scene = new Scene([redSphere]);
+const greenSphere = new Sphere(new Vector3(-1.5, 0, -4), 0.5, new Color(0, 1, 0));
+const blueSphere = new Sphere(new Vector3(1.5, 0, -6), 0.75, new Color(0, 0, 1));
+
+const light1 = new Light(new Vector3(5, 5, 0), 1.0);
+const light2 = new Light(new Vector3(-5, 5, 0), 0.5);
+
+const scene = new Scene([redSphere, greenSphere, blueSphere], [light1, light2]);
 const tracer = new RayTracer(scene);
 
 const png = new PNG({ width, height });

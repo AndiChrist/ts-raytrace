@@ -25,4 +25,8 @@ export class Vector3 {
         const len = this.length();
         return this.scale(1 / len);
     }
+
+    reflect(normal: Vector3): Vector3 {
+        return this.subtract(normal.scale(2 * this.dot(normal)));
+    }
 }

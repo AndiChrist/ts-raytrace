@@ -5,6 +5,10 @@ export class Color {
         return new Color(this.r * s, this.g * s, this.b * s);
     }
 
+    add(c: Color): Color {
+        return new Color(this.r + c.r, this.g + c.g, this.b + c.b);
+    }
+
     toRGB(): [number, number, number] {
         return [
             Math.min(255, Math.max(0, Math.floor(this.r * 255))),
