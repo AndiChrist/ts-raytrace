@@ -1,14 +1,13 @@
 import { Vector3 } from "../math/Vector3";
 import { Ray } from "../core/Ray";
-import { Color } from "../utils/Color";
+import { Material } from "../scene/Material";
 import { AABB } from "../acceleration/AABB";
 
 export class Sphere {
     constructor(
         public center: Vector3,
         public radius: number,
-        public color: Color,
-        public reflectivity: number = 0 // 0 = matte, 1 = perfect mirror
+        public material: Material
     ) {}
 
     intersect(ray: Ray): number | null {

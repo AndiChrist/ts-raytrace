@@ -6,15 +6,20 @@ import { RayTracer } from "./core/RayTracer";
 import { Color } from "./utils/Color";
 import * as fs from "fs";
 import { PNG } from "pngjs";
+import { Material } from "./scene/Material";
 
-const width = 200;
-const height = 100;
+const width = 1200;
+const height = 1000;
 const aspectRatio = width / height;
 const camera = new Camera(new Vector3(0, 0, 0), 2.0, 2.0 / aspectRatio, 1.0);
 
-const redSphere = new Sphere(new Vector3(0, 0, -5), 1, new Color(1, 0, 0), 0.3);
-const greenSphere = new Sphere(new Vector3(-1.5, 0, -4), 0.5, new Color(0, 1, 0), 0.0);
-const blueSphere = new Sphere(new Vector3(1.5, 0, -6), 0.75, new Color(0, 0, 1), 0.8);
+const glass = new Material(new Color(0.6, 0.8, 1.0), 0.1, 0.9, 1.5);
+const metal = new Material(new Color(0.8, 0.8, 0.8), 0.9, 0.0);
+const wood = new Material(new Color(0.5, 0.3, 0.1), 0.0, 0.0);
+
+const redSphere = new Sphere(new Vector3(0, 0, -5), 1, glass);
+const greenSphere = new Sphere(new Vector3(-1.5, 0, -4), 0.5, wood);
+const blueSphere = new Sphere(new Vector3(1.5, 0, -6), 0.75, metal);
 
 const light1 = new Light(new Vector3(5, 5, 0), 1.0);
 const light2 = new Light(new Vector3(-5, 5, 0), 0.5);

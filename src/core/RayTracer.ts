@@ -25,7 +25,7 @@ export class RayTracer {
                 closest = t;
                 hitPoint = ray.origin.add(ray.direction.scale(t));
                 hitNormal = obj.getNormal(hitPoint);
-                hitColor = obj.color;
+                hitColor = obj.material.color;
                 hitObject = obj;
             }
         }
@@ -52,18 +52,40 @@ export class RayTracer {
 
                 if (!inShadow) {
                     const lightPower = Math.max(0, hitNormal.dot(toLight)) * light.intensity;
-                    color = color.add(hitObject.color.multiply(lightPower));
+                    color = color.add(hitObject.material.color.multiply(lightPower));
                 }
             }
 
-            if (hitObject.reflectivity > 0) {
+            if (hitObject.material.reflectivity > 0) {
                 const reflectedDir = ray.direction.reflect(hitNormal).normalize();
                 const reflectedRay = new Ray(
                     hitPoint.add(hitNormal.scale(0.001)),
                     reflectedDir
                 );
                 const reflectedColor = this.trace(reflectedRay, depth + 1);
-                color = color.blend(reflectedColor, hitObject.reflectivity);
+                color = color.blend(reflectedColor, hitObject.material.reflectivity);
+            }
+
+            if (hitObject.material.transparency > 0) {
+                const n = hitNormal;
+                const ni_over_nt = 1 / hitObject.material.refractiveIndex;
+                const dt = ray.direction.dot(n);
+                const discriminant = 1.0 - ni_over_nt * ni_over_nt * (1 - dt * dt);
+
+                if (discriminant > 0) {
+                    const refracted = ray.direction
+                        .subtract(n.scale(dt))
+                        .scale(ni_over_nt)
+                        .subtract(n.scale(Math.sqrt(discriminant)))
+                        .normalize();
+
+                    const refractedRay = new Ray(
+                        hitPoint.add(refracted.scale(0.001)),
+                        refracted
+                    );
+                    const refractedColor = this.trace(refractedRay, depth + 1);
+                    color = color.blend(refractedColor, hitObject.material.transparency);
+                }
             }
 
             return color;
