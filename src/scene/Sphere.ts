@@ -2,8 +2,9 @@ import { Vector3 } from "../math/Vector3";
 import { Ray } from "../core/Ray";
 import { Material } from "../scene/Material";
 import { AABB } from "../acceleration/AABB";
+import { SceneObject } from "./SceneObject";
 
-export class Sphere {
+export class Sphere implements SceneObject {
     constructor(
         public center: Vector3,
         public radius: number,

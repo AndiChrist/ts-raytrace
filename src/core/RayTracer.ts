@@ -3,6 +3,7 @@ import { Color } from "../utils/Color";
 import { Ray } from "./Ray";
 import { Vector3 } from "../math/Vector3";
 import { Sphere } from "../scene/Sphere";
+import { SceneObject } from "../scene/SceneObject";
 
 export class RayTracer {
     constructor(private scene: Scene) {}
@@ -13,7 +14,7 @@ export class RayTracer {
         let closest = Infinity;
         let hitPoint: Vector3 | null = null;
         let hitNormal: Vector3 | null = null;
-        let hitObject: Sphere | null = null;
+        let hitObject: SceneObject | null = null;
 
         for (const obj of this.scene.objects) {
             const bbox = obj.getBoundingBox();
@@ -50,7 +51,8 @@ export class RayTracer {
 
                 if (!inShadow) {
                     const lightPower = Math.max(0, hitNormal.dot(toLight)) * light.intensity;
-                    const diffuse = hitObject.material.color.multiply(lightPower);
+                    const surfaceColor = hitObject.material.getColor(hitPoint);
+                    const diffuse = surfaceColor.multiply(lightPower);
 
                     // ⭐️ Neu: Specular highlight
                     const shininess = hitObject.material.shininess;
@@ -102,6 +104,9 @@ export class RayTracer {
             return color;
         }
 
-        return new Color(0, 0, 0);
+        // Sanfter blauer Himmel
+        const unitDirection = ray.direction.normalize();
+        const t = 0.5 * (unitDirection.y + 1.0);
+        return new Color(1, 1, 1).multiply(1 - t).add(new Color(0.5, 0.7, 1.0).multiply(t));
     }
 }
