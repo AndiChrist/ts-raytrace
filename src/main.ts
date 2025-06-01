@@ -8,10 +8,12 @@ import * as fs from "fs";
 import { PNG } from "pngjs";
 import { Material } from "./scene/Material";
 
-const width = 1200;
-const height = 1000;
+const width = 200;
+const height = 100;
 const aspectRatio = width / height;
-const camera = new Camera(new Vector3(0, 0, 0), 2.0, 2.0 / aspectRatio, 1.0);
+const viewportHeight = 2.0;
+const viewportWidth = aspectRatio * viewportHeight;
+const camera = new Camera(new Vector3(0, 0, 0), viewportWidth, viewportHeight, 1.0);
 
 const shinyRed = new Material(new Color(1, 0, 0), 0.3, 0, 1, 16, 0.7);
 const matteGreen = new Material(new Color(0, 1, 0), 0, 0, 1, 8, 0.1);
