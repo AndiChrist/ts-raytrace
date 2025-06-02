@@ -1,40 +1,26 @@
 import { Vector3 } from "./math/Vector3";
 import { Camera } from "./core/Camera";
-import { Scene, Light } from "./scene/Scene";
-import { Sphere } from "./scene/Sphere";
 import { RayTracer } from "./core/RayTracer";
 import { Color } from "./utils/Color";
 import * as fs from "fs";
 import { PNG } from "pngjs";
-import { Material } from "./scene/Material";
-import { Plane } from "./scene/Plane";
-import { checkerTexture } from "./scene/CheckerTexture"; // oder inline
+import { loadSceneFromFile } from "./sceneLoader";
 
+// Lade Szene + Kamera-Konfig
+const { scene, cameraConfig } = loadSceneFromFile("scene.json");
 
+// Kamera aus JSON-Daten
 const width = 2000;
-const height = 1000;
+const height = 1600;
 const aspectRatio = width / height;
-const viewportHeight = 2.0;
-const viewportWidth = aspectRatio * viewportHeight;
-const camera = new Camera(new Vector3(0, 0, 0), viewportWidth, viewportHeight, 1.0);
-
-const floorMaterial = new Material(new Color(1, 1, 1), 0, 0, 1, 1, 0, checkerTexture);
-const floorPlane = new Plane(new Vector3(0, -1, 0), new Vector3(0, 1, 0), floorMaterial);
-
-const shinyRed = new Material(new Color(1, 0, 0), 0.3, 0, 1, 16, 0.7);
-const matteGreen = new Material(new Color(0, 1, 0), 0, 0, 1, 8, 0.1);
-const mirrorBlue = new Material(new Color(0, 0, 1), 0.9, 0, 1, 128, 1);
-
-const redSphere = new Sphere(new Vector3(0, 0, -5), 1, shinyRed);
-const greenSphere = new Sphere(new Vector3(-1.5, 0, -4), 0.5, matteGreen);
-const blueSphere = new Sphere(new Vector3(1.5, 0, -6), 0.75, mirrorBlue);
-
-const light1 = new Light(new Vector3(5, 5, 0), 1.0);
-const light2 = new Light(new Vector3(-5, 5, 0), 0.5);
-
-const scene = new Scene(
-    [redSphere, greenSphere, blueSphere, floorPlane],
-    [light1, light2]
+const viewportHeight = cameraConfig.viewportHeight;
+const viewportWidth =
+    cameraConfig.viewportWidth ?? aspectRatio * viewportHeight;
+const camera = new Camera(
+    new Vector3(...cameraConfig.position as [number, number, number]),
+    viewportWidth,
+    viewportHeight,
+    cameraConfig.focalLength
 );
 const tracer = new RayTracer(scene);
 

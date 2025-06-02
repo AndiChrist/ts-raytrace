@@ -1,4 +1,3 @@
-import { Sphere } from "./Sphere";
 import { Vector3 } from "../math/Vector3";
 import { SceneObject } from "./SceneObject";
 

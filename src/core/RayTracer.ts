@@ -2,7 +2,6 @@ import { Scene, Light } from "../scene/Scene";
 import { Color } from "../utils/Color";
 import { Ray } from "./Ray";
 import { Vector3 } from "../math/Vector3";
-import { Sphere } from "../scene/Sphere";
 import { SceneObject } from "../scene/SceneObject";
 
 export class RayTracer {
